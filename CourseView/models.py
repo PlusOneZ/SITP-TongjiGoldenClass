@@ -39,33 +39,28 @@ colors = [
 ]
 
 
-class Courses(models.Model):
-    time = models.TimeField(auto_now=True)
+class Course(models.Model):
+    time = models.DateTimeField(auto_now_add=True)
     index = models.IntegerField(primary_key=True)
     heading = models.CharField(null=False, default='未知章节', max_length=30)
     subheading = models.CharField(default='快来学习吧！', max_length=50)
     brief = models.TextField(default='点击开始学习')
     content = MDTextField(null=False)
 
-    @staticmethod
-    def as_brief_dict(index: int) -> dict:
-        course = Courses.objects.get(index=index)
-        d = {
-            "heading": "错误文章",
-            "subheading": "请检查",
-            "content": "",
-            "graph_text": "0",
-            "block_color": "black",
-            "font_color": "red"
-        }
-        if course:
-            d['font_color'] = colors[index % len(colors)][0]
-            d['block_color'] = colors[index % len(colors)][1]
-            d['heading'] = course.heading
-            d['subheading'] = course.subheading
-            if course.heading[0] != '第' or course.heading[0] != '期':
-                d['graph_text'] = course.heading[0]
-            else:
-                d['graph_text'] = course.heading[1]
-            d['content'] = course.brief
+    def as_brief_dict(self) -> dict:
+        d = {'font_color': colors[self.index % len(colors)][1], 'block_color': colors[self.index % len(colors)][0],
+             'heading': self.heading, 'subheading': self.subheading, 'index': self.index}
+        if self.heading[0] != '第' and self.heading[0] != '期':
+            d['graph_text'] = self.heading[0]
+        else:
+            d['graph_text'] = self.heading[1]
+        d['brief'] = self.brief
         return d
+
+    def as_content_dict(self) -> dict:
+        con = markdown.markdown(self.content)
+        return {
+            'heading': self.heading,
+            'content': con,
+            'time': self.time
+        }

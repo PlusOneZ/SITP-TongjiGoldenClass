@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 
 from functools import wraps
 
-from .models import User
+from .models import User, Course
 
 # Create your views here.
 
@@ -90,15 +90,18 @@ def task_view(request) -> HttpResponse:
 @check_login
 def courses_list_view(request) -> HttpResponse:
     user_id = int(request.COOKIES.get('user_id'))
+    data = Course.objects.order_by('time')
+    items = [d.as_brief_dict() for d in data]
     return render(
         request, 'tasks.html',
         {
             'user_name': user_id,
             "user_page": "/me",
-            'item': item,
+            'items': items,
             'title': "课程"
         }
     )
+
 
 
 ################################ Login ##############################
