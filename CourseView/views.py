@@ -48,7 +48,16 @@ def console_view(request) -> HttpResponse:
         r = "管理员"
     else:
         r = ''
-    return render(request, 'console.html', {'user_name': name, "user_page": "/me", "user_id": user_id, "user_title": r})
+    return render(
+        request, 'console.html',
+        {
+            'user_name': name,
+            "user_page": "/me",
+            "user_id": user_id,
+            "user_title": r,
+            'user_name_and_title': name + r + '的控制台'
+        }
+    )
 
 
 item = {
@@ -66,14 +75,30 @@ item = {
 @check_login
 def task_view(request) -> HttpResponse:
     user_id = int(request.COOKIES.get('user_id'))
-    return render(request, 'tasks.html', {'user_name': user_id, "user_page": "/me",  'item': item})
+    return render(
+        request, 'tasks.html',
+        {
+            'user_name': user_id,
+            "user_page": "/me",
+            'item': item,
+            'title': "任务"
+        }
+    )
 
 
 # Courses page
 @check_login
 def courses_list_view(request) -> HttpResponse:
     user_id = int(request.COOKIES.get('user_id'))
-    return render(request, 'tasks.html', {'user_name': user_id, "user_page": "/me",  'item': item})
+    return render(
+        request, 'tasks.html',
+        {
+            'user_name': user_id,
+            "user_page": "/me",
+            'item': item,
+            'title': "课程"
+        }
+    )
 
 
 ################################ Login ##############################
