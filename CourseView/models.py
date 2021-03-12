@@ -42,14 +42,15 @@ colors = [
 class Course(models.Model):
     time = models.DateTimeField(auto_now_add=True)
     index = models.IntegerField(primary_key=True)
-    heading = models.CharField(null=False, default='未知章节', max_length=30)
+    heading = models.CharField(null=False, default='未知节', max_length=30)
     subheading = models.CharField(default='快来学习吧！', max_length=50)
     brief = models.TextField(default='点击开始学习')
     content = MDTextField(null=False)
+    chapter = models.CharField(null=False, default='未知章', max_length=10)
 
     def as_brief_dict(self) -> dict:
         d = {'font_color': colors[self.index % len(colors)][1], 'block_color': colors[self.index % len(colors)][0],
-             'heading': self.heading, 'subheading': self.subheading, 'index': self.index}
+             'heading': str(self.chapter) + str(self.heading), 'subheading': self.subheading, 'index': self.index}
         if self.heading[0] != '第' and self.heading[0] != '期':
             d['graph_text'] = self.heading[0]
         else:
@@ -61,7 +62,21 @@ class Course(models.Model):
         con = markdown.markdown(self.content)
 
         return {
-            'heading': self.heading,
+            'heading': str(self.chapter) + str(self.heading),
             'content': con,
             'time': self.time
         }
+
+
+class Learns(models.Model):
+    student = models.ForeignKey(User, on_delete=models.PROTECT)
+    course = models.ForeignKey(Course, on_delete=models.PROTECT)
+    time = models.DateTimeField(auto_now=True)
+
+
+class Task(models.Model):
+    index = models.IntegerField(primary_key=True)
+    title = models.CharField(null=False, default='新任务', max_length=30)
+    brief = models.TextField(default='任务描述')
+    allow_files = models.BooleanField(default=True)
+

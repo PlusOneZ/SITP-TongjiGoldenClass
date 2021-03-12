@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
+# from django.views.defaults import page_not_found
 
 from functools import wraps
 
-from .models import User, Course
+from .models import *
 
 # Create your views here.
 
@@ -48,6 +49,27 @@ def console_view(request) -> HttpResponse:
         r = "管理员"
     else:
         r = ''
+
+    table = []
+    if role == User.STUDENT:
+        progress = Learns.objects.filter(student=user_id)
+        courses = Course.objects.all()
+        for course in courses:
+            if progress.filter(course=course.index):
+                table.append({
+                    'title': str(course.chapter) + str(course.heading),
+                    'status': '完成',
+                    'bool': 1,
+                    'time': progress.get(course=course.index).time
+                })
+            else:
+                table.append({
+                    'title': str(course.chapter) + str(course.heading),
+                    'status': '未完成',
+                    'bool': 0,
+                    'time': '-'
+                })
+
     return render(
         request, 'console.html',
         {
@@ -55,7 +77,8 @@ def console_view(request) -> HttpResponse:
             "user_page": "/me",
             "user_id": user_id,
             "user_title": r,
-            'user_name_and_title': name + r + '的控制台'
+            'user_name_and_title': name + r + '的控制台',
+            'progress': table
         }
     )
 
@@ -64,15 +87,7 @@ def console_view(request) -> HttpResponse:
 @check_login
 def task_view(request) -> HttpResponse:
     user_id = int(request.COOKIES.get('user_id'))
-    return render(
-        request, 'courses.html',
-        {
-            'user_name': user_id,
-            "user_page": "/me",
-            'item': item,
-            'title': "任务"
-        }
-    )
+    return render(request, 'tasks.html', {'user_name': user_id, "user_page": "/me"})
 
 
 # Courses page
@@ -93,11 +108,20 @@ def courses_list_view(request) -> HttpResponse:
 
 
 # Course
+@check_login
 def course_view(request, index=0) -> HttpResponse:
-    print(request.path)
-    course = Course.objects.get(index=index)
+    try:
+        course = Course.objects.get(index=index)
+    except Course.DoesNotExist:
+        raise Http404
+    user_id = int(request.COOKIES.get('user_id'))
+    learns = Learns.objects.create(student=User.objects.get(ID=user_id), course=course)
+    learns.save()
+    course = course.as_content_dict()
+    course['user_name'] = user_id
+    course['user_page'] = '/me'
     if course:
-        return render(request, 'index.html', course.as_content_dict())
+        return render(request, 'index.html', course)
 
 
 # ############################### Login ##############################
