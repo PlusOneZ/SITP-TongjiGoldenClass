@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from functools import wraps
 
 from .models import User
+
 # Create your views here.
 
 SALT = '盐巴'
@@ -20,6 +21,7 @@ def check_login(func):
         else:
             next_url = request.path_info
             return redirect("/signin/?next={}".format(next_url))
+
     return inner
 
 
@@ -46,20 +48,35 @@ def console_view(request) -> HttpResponse:
         r = "管理员"
     else:
         r = ''
-    return render(request, 'console.html', {'user_name': name, "user_id": user_id, "user_title": r})
+    return render(request, 'console.html', {'user_name': name, "user_page": "/me", "user_id": user_id, "user_title": r})
+
+
+item = {
+    "heading": "Django详解之models操作。",
+    "subheading": "好玩！",
+    "content": "Dango 模型是与数据库相关的,与数据库相关的代码一般写在 models.py 中,"
+               "Django 支持 sqlite3, MySQL, PostgreSQL等数据库,只需要在settings.py中配置即可,不用",
+    "graph_text": "一",
+    "block_color": "red",
+    "font_color": "blue"
+}
 
 
 # Task page
 @check_login
 def task_view(request) -> HttpResponse:
-    return render(request, 'tasks.html')
+    user_id = int(request.COOKIES.get('user_id'))
+    return render(request, 'tasks.html', {'user_name': user_id, "user_page": "/me",  'item': item})
 
 
 # Courses page
 @check_login
 def courses_list_view(request) -> HttpResponse:
-    return render(request, 'tasks.html')
+    user_id = int(request.COOKIES.get('user_id'))
+    return render(request, 'tasks.html', {'user_name': user_id, "user_page": "/me",  'item': item})
 
+
+################################ Login ##############################
 
 # Sign in page
 def sign_in_view(request) -> HttpResponse:
@@ -107,4 +124,3 @@ def login_view(request) -> HttpResponse:
         ret.set_signed_cookie('signed_in', '0', salt=SALT, max_age=1000)
 
     return ret
-

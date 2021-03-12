@@ -22,7 +22,7 @@
 <body>
 
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">同济金课</a>
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="/">同济金课</a>
     <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
             data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
             aria-label="Toggle navigation">
@@ -204,18 +204,20 @@
                 <div class="row featurette">
 
                     <div class="col-md-10 order-md-2">
-                        <h2 class="featurette-heading"> {{ heading }} <span
-                                class="text-muted"> {{ subheading }}</span></h2>
-                        <p class="lead"> {{ content }} </p>
+                        <h2 class="featurette-heading"> {{ item.heading }} <span
+                                class="text-muted"> {{ item.subheading }}</span></h2>
+                        <p class="lead"> {{ item.content }} </p>
                     </div>
                     <div class="col-md-2 order-md-1">
                         <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto"
-                             width="200" height="200" xmlns="http://www.w3.org/2000/svg" role="img"
-                             aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice" focusable="false">
-                            <title> {{ graph_text }} </title>
-                            <rect width="100%" height="100%" fill="{{ block_color }}"/>
-                            <text x="50%" y="50%" fill="{{ font_color }}" font-size="100px" font-family="Helvetica"
-                                  dx="-0.5em" dy="0.3em"> {{ graph_text }}</text>
+                             width="200" height="200" xmlns="http://www.w3.org/2000/svg"
+                             preserveAspectRatio="xMidYMid slice" focusable="false">
+                            <title> {{ item.graph_text }} </title>
+                            <rect width="100%" height="100%" fill="{{ item.block_color }}"></rect>
+                            <text x="25%" y="70%" fill="{{ item.font_color }}" font-size="100px"
+                                  font-family="Helvetica">
+                                {{ item.graph_text }}
+                            </text>
                         </svg>
                     </div>
 
