@@ -31,7 +31,7 @@ def index_view(request) -> HttpResponse:
     user_name = request.COOKIES.get('user_id')
     if not user_name:
         redirect('/signin?next={}'.format('/'))
-    return render(request, "index.html", {"user_name": user_name, "user_page": "/me"})
+    return redirect('/courses/1')
 
 
 # User console page
@@ -60,23 +60,12 @@ def console_view(request) -> HttpResponse:
     )
 
 
-item = {
-    "heading": "Django详解之models操作。",
-    "subheading": "好玩！",
-    "content": "Dango 模型是与数据库相关的,与数据库相关的代码一般写在 models.py 中,"
-               "Django 支持 sqlite3, MySQL, PostgreSQL等数据库,只需要在settings.py中配置即可,不用",
-    "graph_text": "一",
-    "block_color": "red",
-    "font_color": "blue"
-}
-
-
 # Task page
 @check_login
 def task_view(request) -> HttpResponse:
     user_id = int(request.COOKIES.get('user_id'))
     return render(
-        request, 'tasks.html',
+        request, 'courses.html',
         {
             'user_name': user_id,
             "user_page": "/me",
@@ -93,7 +82,7 @@ def courses_list_view(request) -> HttpResponse:
     data = Course.objects.order_by('time')
     items = [d.as_brief_dict() for d in data]
     return render(
-        request, 'tasks.html',
+        request, 'courses.html',
         {
             'user_name': user_id,
             "user_page": "/me",
@@ -103,8 +92,16 @@ def courses_list_view(request) -> HttpResponse:
     )
 
 
+# Course
+def course_view(request, index=0) -> HttpResponse:
+    print(request.path)
+    course = Course.objects.get(index=index)
+    if course:
+        return render(request, 'index.html', course.as_content_dict())
 
-################################ Login ##############################
+
+# ############################### Login ##############################
+
 
 # Sign in page
 def sign_in_view(request) -> HttpResponse:

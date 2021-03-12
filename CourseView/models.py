@@ -59,6 +59,7 @@ class Course(models.Model):
 
     def as_content_dict(self) -> dict:
         con = markdown.markdown(self.content)
+
         return {
             'heading': self.heading,
             'content': con,
