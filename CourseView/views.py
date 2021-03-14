@@ -83,22 +83,6 @@ def console_view(request) -> HttpResponse:
     )
 
 
-# Task page
-@check_login
-def task_view(request) -> HttpResponse:
-    user_id = int(request.COOKIES.get('user_id'))
-    tasks = Task.objects.all()
-    items = [t.as_brief_dict() for t in tasks]
-    return render(
-        request, 'tasks.html',
-        {
-            'user_name': user_id,
-            "user_page": "/me",
-            "items": items
-        }
-    )
-
-
 # Courses page
 @check_login
 def courses_list_view(request) -> HttpResponse:
