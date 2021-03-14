@@ -124,9 +124,13 @@ def course_view(request, index=0) -> HttpResponse:
         return render(request, 'index.html', course)
 
 
+@check_login
+def in_develop(request) -> HttpResponse:
+    user_id = int(request.COOKIES.get('user_id'))
+    return render(request, 'in_development.html', {"user_name": user_id, 'user_page': '/me'})
+
+
 # ############################### Login ##############################
-
-
 # Sign in page
 def sign_in_view(request) -> HttpResponse:
     hint = request.GET.get('hint')
@@ -147,13 +151,11 @@ def login_view(request) -> HttpResponse:
     user_id = request.POST["ID"]
     user_password = request.POST['pwd']
     next_url = request.GET.get("next")
-    print(user_id, user_password)
-    print(User.objects.all())
 
     try:
         user = User.objects.get(ID=int(user_id))
     except User.DoesNotExist:
-        user = []
+        user = None
 
     if user:
         if user.pwd == user_password:

@@ -1,0 +1,75 @@
+.
+├── CourseView
+│   ├── __init__.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-39.pyc
+│   │   ├── admin.cpython-39.pyc
+│   │   ├── models.cpython-39.pyc
+│   │   └── views.cpython-39.pyc
+│   ├── admin.py
+│   ├── apps.py
+│   ├── migrations
+│   │   ├── 0001_initial.py
+│   │   ├── 0002_auto_20210311_0157.py
+│   │   ├── 0003_auto_20210311_1457.py
+│   │   ├── 0004_courses.py
+│   │   ├── 0005_auto_20210312_2034.py
+│   │   ├── 0006_auto_20210312_2058.py
+│   │   ├── 0007_auto_20210313_0119.py
+│   │   ├── __init__.py
+│   │   └── __pycache__
+│   │       ├── 0001_initial.cpython-39.pyc
+│   │       ├── 0002_auto_20210311_0157.cpython-39.pyc
+│   │       ├── 0003_auto_20210311_1457.cpython-39.pyc
+│   │       ├── 0004_courses.cpython-39.pyc
+│   │       ├── 0005_auto_20210312_2034.cpython-39.pyc
+│   │       ├── 0006_auto_20210312_2058.cpython-39.pyc
+│   │       ├── 0007_auto_20210313_0119.cpython-39.pyc
+│   │       └── __init__.cpython-39.pyc
+│   ├── models.py
+│   ├── tests.py
+│   └── views.py
+├── GoldClass
+│   ├── __init__.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-39.pyc
+│   │   ├── settings.cpython-39.pyc
+│   │   ├── urls.cpython-39.pyc
+│   │   └── wsgi.cpython-39.pyc
+│   ├── asgi.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── __pycache__
+│   └── manage.cpython-39.pyc
+├── db.sqlite3
+├── manage.py
+├── static
+│   ├── css
+│   │   ├── bootstrap.css
+│   │   ├── bootstrap.css.map
+│   │   ├── bootstrap.min.css
+│   │   ├── bootstrap.min.css.map
+│   │   ├── code.css
+│   │   ├── dashboard.css
+│   │   └── signin.css
+│   ├── img
+│   │   └── bootstrap-logo.svg
+│   └── js
+│       ├── bootstrap.bundle.js
+│       ├── bootstrap.bundle.js.map
+│       ├── bootstrap.bundle.min.js
+│       └── bootstrap.bundle.min.js.map
+├── t.txt
+├── templates
+│   ├── console.html
+│   ├── courses.html
+│   ├── in_development.html
+│   ├── index.html
+│   ├── signin.html
+│   └── tasks.html
+├── uploads
+└── utils
+    └── init_db.json
+
+14 directories, 58 files

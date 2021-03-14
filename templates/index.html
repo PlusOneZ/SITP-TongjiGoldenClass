@@ -66,13 +66,13 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/online-lecture">
+                        <a class="nav-link" href="/onlineLecture">
                             <span data-feather="shopping-cart"></span>
                             在线课堂
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/course-records">
+                        <a class="nav-link" href="/courseRecords">
                             <span data-feather="users"></span>
                             录课
                         </a>
@@ -126,6 +126,19 @@
             </div>
             {#            <p> {{ time|date:"Y-m-d H:i:s" }}</p>#}
             {{ content|safe }}
+
+            <footer class="container">
+                <p class="float-end"><a href="#">Back to top</a></p>
+                <p>&copy; 2020-2021 同济金课课题组. ·
+                    {% if prev_page %}
+                    <a href="courses/{{ prev_page }}"> 上一节</a>
+                    {% endif %}
+                     ·
+                    {% if next_page %}
+                    <a href="courses/{{ next_page }}"> 下一节</a>
+                    {% endif %}
+                </p>
+            </footer>
 
         </main>
     </div>

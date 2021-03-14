@@ -74,9 +74,19 @@ class Learns(models.Model):
     time = models.DateTimeField(auto_now=True)
 
 
+TASK_TYPES = [
+    ('1', "通知"),
+    ('2', "翻转课"),
+    ('3', "作业"),
+    ('4', "任务")
+]
+
+
 class Task(models.Model):
     index = models.IntegerField(primary_key=True)
     title = models.CharField(null=False, default='新任务', max_length=30)
+    task_type = models.CharField(null=False, choices=TASK_TYPES, max_length=10)
+    content = models.TextField(null=False, default='发布了新的任务')
     brief = models.TextField(default='任务描述')
     allow_files = models.BooleanField(default=True)
 
