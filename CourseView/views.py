@@ -87,7 +87,16 @@ def console_view(request) -> HttpResponse:
 @check_login
 def task_view(request) -> HttpResponse:
     user_id = int(request.COOKIES.get('user_id'))
-    return render(request, 'tasks.html', {'user_name': user_id, "user_page": "/me"})
+    tasks = Task.objects.all()
+    items = [t.as_brief_dict() for t in tasks]
+    return render(
+        request, 'tasks.html',
+        {
+            'user_name': user_id,
+            "user_page": "/me",
+            "items": items
+        }
+    )
 
 
 # Courses page
@@ -114,14 +123,26 @@ def course_view(request, index=0) -> HttpResponse:
         course = Course.objects.get(index=index)
     except Course.DoesNotExist:
         raise Http404
+    # record
     user_id = int(request.COOKIES.get('user_id'))
     learns = Learns.objects.create(student=User.objects.get(ID=user_id), course=course)
     learns.save()
+    # build dict
     course = course.as_content_dict()
     course['user_name'] = user_id
     course['user_page'] = '/me'
-    if course:
-        return render(request, 'index.html', course)
+    # prev and next
+    try:
+        Course.objects.get(index=index-1)
+        course['prev_page'] = str(index-1)
+    except Course.DoesNotExist:
+        pass
+    try:
+        Course.objects.get(index=index + 1)
+        course['next_page'] = str(index + 1)
+    except Course.DoesNotExist:
+        pass
+    return render(request, 'index.html', course)
 
 
 @check_login

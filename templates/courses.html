@@ -38,36 +38,8 @@
 
 <div class="container-fluid">
     <div class="row">
-        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-            <div class="position-sticky pt-3">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/courses">
-                            <span data-feather="home"></span>
-                            课程
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/tasks">
-                            <span data-feather="file"></span>
-                            任务
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/onlineLecture">
-                            <span data-feather="shopping-cart"></span>
-                            在线课堂
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/courseRecords">
-                            <span data-feather="users"></span>
-                            录课
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+
+        {% include '_nav_template.html' %}
 
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
