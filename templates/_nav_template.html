@@ -2,25 +2,29 @@
     <div class="position-sticky pt-3">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/courses">
+                <a class="nav-link {% if active == "course" %} active {% endif %}"
+                   aria-current="page" href="/courses">
                     <span data-feather="home"></span>
                     课程
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/tasks">
+                <a class="nav-link {% if active == "task" %} active {% endif %}"
+                   href="/tasks">
                     <span data-feather="file"></span>
                     任务
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/onlineLecture">
+                <a class="nav-link {% if active == "onlineLecture" %} active {% endif %}"
+                   href="/onlineLecture">
                     <span data-feather="shopping-cart"></span>
                     在线课堂
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/courseRecords">
+                <a class="nav-link {% if active == "courseRecords" %} active {% endif %}"
+                   href="/courseRecords">
                     <span data-feather="users"></span>
                     录课
                 </a>

@@ -103,3 +103,17 @@ a div {
   color: #212529;
   text-underline: none;
 }
+
+.file-input-button {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+}
+
+.file-input-button input {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  -webkit-filter: opacity(0);
+}

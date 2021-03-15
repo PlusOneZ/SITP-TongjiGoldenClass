@@ -9,7 +9,7 @@
 <div class="container-fluid">
     <div class="row">
 
-        {% include '_nav_template.html'%}
+        {% include '_nav_template.html' %}
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="width: 80%">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -21,8 +21,22 @@
                     </div>
                 </div>
             </div>
+            {% if due_time %}
+                <p> 截止日期：{{ due_time|date:"Y-m-d" }}</p>
+            {% endif %}
 
             {{ content|safe }}
+
+            <hr>
+
+            <form method="post" style="text-align: center">
+                <div>
+                    <input type="file">
+                </div>
+                {% csrf_token %}
+            </form>
+
+            <hr>
 
             <footer class="container">
                 <p class="float-end"><a href="#">Back to top</a></p>

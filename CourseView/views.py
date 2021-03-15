@@ -78,7 +78,8 @@ def console_view(request) -> HttpResponse:
             "user_id": user_id,
             "user_title": r,
             'user_name_and_title': name + r + '的控制台',
-            'progress': table
+            'progress': table,
+            'active': 'none'
         }
     )
 
@@ -95,7 +96,8 @@ def courses_list_view(request) -> HttpResponse:
             'user_name': user_id,
             "user_page": "/me",
             'items': items,
-            'title': "课程"
+            'title': "课程",
+            'active': 'course'
         }
     )
 
@@ -109,10 +111,16 @@ def course_view(request, index=0) -> HttpResponse:
         raise Http404
     # record
     user_id = int(request.COOKIES.get('user_id'))
-    learns = Learns.objects.create(student=User.objects.get(ID=user_id), course=course)
-    learns.save()
+    if not Learns.objects.filter(course=course):
+        learns = Learns.objects.create(student=User.objects.get(ID=user_id), course=course)
+        learns.save()
+    else:
+        learns = Learns.objects.get(course=course)
+        learns.time = learns.time.now()
+        learns.save()
     # build dict
     course = course.as_content_dict()
+    course['active'] = 'course'
     course['user_name'] = user_id
     course['user_page'] = '/me'
     # prev and next
@@ -132,7 +140,13 @@ def course_view(request, index=0) -> HttpResponse:
 @check_login
 def in_develop(request) -> HttpResponse:
     user_id = int(request.COOKIES.get('user_id'))
-    return render(request, 'in_development.html', {"user_name": user_id, 'user_page': '/me'})
+    return render(
+        request, 'in_development.html',
+        {
+            "user_name": user_id,
+            'user_page': '/me',
+            'activate': 'none'
+        })
 
 
 # ############################### Login ##############################

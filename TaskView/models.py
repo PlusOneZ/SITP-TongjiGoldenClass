@@ -1,4 +1,5 @@
 from django.db import models
+from CourseView.models import colors
 
 # Create your models here.
 TASK_TYPES = [
@@ -6,17 +7,6 @@ TASK_TYPES = [
     ('2', "翻转课"),
     ('3', "作业"),
     ('4', "任务")
-]
-
-colors = [
-    ['#2f90b9', '#2f2f35'],
-    ['#525288', '#983680'],
-    ['#36292f', '#d2568c'],
-    ['#621624', '#ee4866'],
-    ['#132c33', '#2c9678'],
-    ['#5b4913', '#fbc82f'],
-    ['#862617', '#dc9123'],
-    ['#482522', '#f43e06']
 ]
 
 
