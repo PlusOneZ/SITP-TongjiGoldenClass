@@ -40,47 +40,59 @@ def task_view(request, index) -> HttpResponse:
     task_dict['user_page'] = '/me'
     task_dict['active'] = 'task'
     task_dict['error'] = ''
-    if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            if task.file_type == 'IMAGE':
-                content = RestrictedFileField.IMAGE
-            elif task.file_type == 'TEXT':
-                content = RestrictedFileField.TEXT
-            elif task.file_type == 'AUDIO':
-                content = RestrictedFileField.AUDIO
-            elif task.file_type == 'COMPRESS':
-                content = RestrictedFileField.COMPRESSED
+    task_dict['teacher_view'] = False
+
+    role = User.objects.get(ID=user_id).role
+
+    if role == User.STUDENT:
+        if request.method == 'POST':
+            form = UploadFileForm(request.POST, request.FILES)
+            if form.is_valid():
+                if task.file_type == 'IMAGE':
+                    content = RestrictedFileField.IMAGE
+                elif task.file_type == 'TEXT':
+                    content = RestrictedFileField.TEXT
+                elif task.file_type == 'AUDIO':
+                    content = RestrictedFileField.AUDIO
+                elif task.file_type == 'COMPRESS':
+                    content = RestrictedFileField.COMPRESSED
+                else:
+                    content = []
+                print(content)
+                try:
+                    uploaded_file = UploadedTaskFile.create_instance(
+                        task=task,
+                        student=User.objects.get(ID=user_id),
+                        file=request.FILES.get('file'),
+                        content_type=content
+                    )
+                    uploaded_file.save()
+                    print("ok")
+                    task_dict['error'] = '上传成功'
+                except forms.ValidationError:
+                    task_dict['error'] = "文件格式不正确，请提供" + task.get_file_type_display() + "格式的文件。"
+                    print('type not ok')
             else:
-                content = []
-            print(content)
-            try:
-                uploaded_file = UploadedTaskFile.create_instance(
-                    task=task,
-                    student=User.objects.get(ID=user_id),
-                    file=request.FILES.get('file'),
-                    content_type=content
-                )
-                uploaded_file.save()
-                print("ok")
-                task_dict['error'] = '上传成功'
-            except forms.ValidationError:
-                task_dict['error'] = "文件格式不正确，请提供" + task.get_file_type_display() + "格式的文件。"
-                print('type not ok')
-        else:
-            print("not ok" + str(form.errors) + str(request.FILES))
+                print("not ok" + str(form.errors) + str(request.FILES))
 
-    form = UploadFileForm()
+        if task_dict['allow_file']:
+            form = UploadFileForm()
+            task_dict['form'] = form
+        try:
+            Task.objects.get(index=index-1)
+            task_dict['prev_page'] = str(index-1)
+        except Task.DoesNotExist:
+            pass
+        try:
+            Task.objects.get(index=index + 1)
+            task_dict['next_page'] = str(index + 1)
+        except Task.DoesNotExist:
+            pass
+        return render(request, 'task.html', task_dict)
 
-    task_dict['form'] = form
-    try:
-        Task.objects.get(index=index-1)
-        task_dict['prev_page'] = str(index-1)
-    except Task.DoesNotExist:
-        pass
-    try:
-        Task.objects.get(index=index + 1)
-        task_dict['next_page'] = str(index + 1)
-    except Task.DoesNotExist:
-        pass
-    return render(request, 'task.html', task_dict)
+    elif role == User.TEACHER:
+        task_dict['teacher_view'] = True
+        files = UploadedTaskFile.objects.filter(task=task)
+        task_dict['files'] = files
+        return render(request, 'task.html', task_dict)
+

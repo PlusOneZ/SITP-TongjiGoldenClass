@@ -29,16 +29,36 @@
 
             <hr>
 
-            <form method="POST" class="form-control-color" role="form" enctype="multipart/form-data">
-                <div class="form-group">
-                    {{ form }}
-                </div>
-                <input type="submit" value="提 交">
-                <p> {{ error }} </p>
-                {% csrf_token %}
-            </form>
+            {% if allow_file and not teacher_view %}
+                <form method="POST" class="form-control-color" role="form" enctype="multipart/form-data">
+                    <div class="form-group">
+                        {{ form }}
+                    </div>
+                    <input type="submit" value="提 交">
+                    <p> {{ error }} </p>
+                    {% csrf_token %}
+                </form>
 
-            <hr>
+                <hr>
+            {% endif %}
+
+            {% if teacher_view %}
+                <h2 class="h2"> 上传情况 </h2>
+                <table class="table table-striped table-hover">
+                    <tr>
+                        <th>学生</th>
+                        <th>文件</th>
+                        <th>操作</th>
+                    </tr>
+                    {% for file in files %}
+                        <tr>
+                            <td>{{ file.student.ID }}</td>
+                            <td>{{ file.file.name }}</td>
+                            <td><a href="#"> 下载 </a> </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% endif %}
 
             <footer class="container">
                 <p class="float-end"><a href="#">Back to top</a></p>

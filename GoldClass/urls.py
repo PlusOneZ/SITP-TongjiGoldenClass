@@ -30,5 +30,6 @@ urlpatterns = [
     path('courses/<int:index>', course_view, name='course'),
     path('tasks/<int:index>', task_view, name='course'),
     path(r'onlineLecture/', in_develop, name='lectures'),
-    path(r'courseRecords/', in_develop, name='records')
+    path(r'courseRecords/', in_develop, name='records'),
+    path('logout/', logout, name='logout'),
 ]

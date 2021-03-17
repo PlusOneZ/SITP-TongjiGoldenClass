@@ -187,10 +187,18 @@ def login_view(request) -> HttpResponse:
         else:
             print('Wrong password')
             ret = HttpResponseRedirect('/signin?hint=wrong_password')
-            ret.set_signed_cookie('signed_in', '0', salt=SALT, max_age=1000)
+            ret.set_signed_cookie('signed_in', '0', salt=SALT)
     else:
         print("User not exist")
         ret = HttpResponseRedirect('/signin?hint=user_not_found')
-        ret.set_signed_cookie('signed_in', '0', salt=SALT, max_age=1000)
+        ret.set_signed_cookie('signed_in', '0', salt=SALT)
 
+    return ret
+
+
+# Logout
+def logout(request) -> HttpResponse:
+    ret = redirect('/')
+    ret.set_signed_cookie('signed_in', '0', salt=SALT)
+    ret.set_cookie('user_id', str('undefined'))
     return ret

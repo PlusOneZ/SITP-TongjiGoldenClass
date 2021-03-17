@@ -41,7 +41,8 @@ class Task(models.Model):
             'subheading': self.get_task_type_display(),
             'index': self.index,
             'graph_text': self.title[0],
-            'brief': self.brief
+            'brief': self.brief,
+            'allow_file': self.allow_files
         }
 
     def as_content_dict(self) -> dict:
@@ -96,7 +97,7 @@ class RestrictedFileField(models.FileField):
 class UploadedTaskFile(models.Model):
     task = models.ForeignKey(Task, on_delete=models.PROTECT)
     student = models.ForeignKey(User, on_delete=models.PROTECT)
-    file = RestrictedFileField(max_upload_size=10485760, upload_to='uploads/task/'+str(task.remote_field.model.index))
+    file = RestrictedFileField(max_upload_size=10485760, upload_to='task/'+str(task.remote_field.model.index))
     time = models.DateTimeField(auto_now_add=True)
 
     @staticmethod
