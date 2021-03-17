@@ -5,8 +5,9 @@ from django import forms
 # Create your views here.
 
 
-class UploadForm(forms.Form):
-    file = forms.FileField()
+class UploadFileForm(forms.Form):
+    title = forms.CharField(max_length=50)
+    file = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True}), max_length=10240)
 
 
 # Task page
@@ -37,6 +38,15 @@ def task_view(request, index) -> HttpResponse:
     task['user_name'] = user_id
     task['user_page'] = '/me'
     task['active'] = 'task'
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            print("ok")
+        else:
+            print("not ok" + str(form.errors) + str(request.FILES))
+
+    form = UploadFileForm()
+    task['form'] = form
     try:
         Task.objects.get(index=index-1)
         task['prev_page'] = str(index-1)

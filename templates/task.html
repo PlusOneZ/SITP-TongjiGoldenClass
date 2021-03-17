@@ -29,10 +29,11 @@
 
             <hr>
 
-            <form method="post" style="text-align: center">
-                <div>
-                    <input type="file">
+            <form method="POST" class="form-control-color" role="form" enctype="multipart/form-data">
+                <div class="form-group">
+                    {{ form }}
                 </div>
+                <input type="submit" value="提 交">
                 {% csrf_token %}
             </form>
 

@@ -9,6 +9,13 @@ TASK_TYPES = [
     ('4', "任务")
 ]
 
+FILE_TYPES = [
+    ('IMAGE', "图片"),
+    ('COMPRESS', "压缩包"),
+    ('TEXT', "文本"),
+    ('OTHER', "其他")
+]
+
 
 class Task(models.Model):
     index = models.IntegerField(primary_key=True)
@@ -17,6 +24,7 @@ class Task(models.Model):
     content = models.TextField(null=False, default='发布了新的任务')
     brief = models.TextField(default='任务描述')
     allow_files = models.BooleanField(default=True)
+    file_type = models.CharField(max_length=30, choices=FILE_TYPES, default='TEXT')
     due_time = models.DateField(null=True, default=None)
 
     def as_brief_dict(self) -> dict:
@@ -37,3 +45,4 @@ class Task(models.Model):
             'due_time': self.due_time,
             'allow_files': self.allow_files,
         }
+
