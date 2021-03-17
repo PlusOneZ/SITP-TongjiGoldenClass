@@ -1,3 +1,4 @@
 /utils/*
 db.sqlite3
 *.log
+/uploads/*
