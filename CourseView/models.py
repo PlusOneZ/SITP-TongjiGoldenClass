@@ -14,7 +14,7 @@ class User(models.Model):
         (ADMIN, 'Admin')
     ]
 
-    ID = models.IntegerField(primary_key=True, null=False)
+    ID = models.CharField(primary_key=True, null=False, max_length=10)
     pwd = models.TextField()
     real_name = models.CharField(
         max_length=20,

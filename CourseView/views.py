@@ -38,7 +38,7 @@ def index_view(request) -> HttpResponse:
 # User console page
 @check_login
 def console_view(request) -> HttpResponse:
-    user_id = int(request.COOKIES.get('user_id'))
+    user_id = request.COOKIES.get('user_id')
     role = User.objects.get(ID=user_id).role
     name = User.objects.get(ID=user_id).real_name
     if role == User.STUDENT:
@@ -87,7 +87,7 @@ def console_view(request) -> HttpResponse:
 # Courses page
 @check_login
 def courses_list_view(request) -> HttpResponse:
-    user_id = int(request.COOKIES.get('user_id'))
+    user_id = request.COOKIES.get('user_id')
     data = Course.objects.order_by('time')
     items = [d.as_brief_dict() for d in data]
     return render(
@@ -139,7 +139,7 @@ def course_view(request, index=0) -> HttpResponse:
 
 @check_login
 def in_develop(request) -> HttpResponse:
-    user_id = int(request.COOKIES.get('user_id'))
+    user_id = request.COOKIES.get('user_id')
     return render(
         request, 'in_development.html',
         {
@@ -172,7 +172,7 @@ def login_view(request) -> HttpResponse:
     next_url = request.GET.get("next")
 
     try:
-        user = User.objects.get(ID=int(user_id))
+        user = User.objects.get(ID=user_id)
     except User.DoesNotExist:
         user = None
 
