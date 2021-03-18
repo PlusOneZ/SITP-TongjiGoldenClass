@@ -1,4 +1,5 @@
 from django.shortcuts import render, HttpResponse, Http404
+from django.http import StreamingHttpResponse
 from .models import Task, UploadedTaskFile, RestrictedFileField
 from CourseView.views import check_login
 from CourseView.models import User
@@ -75,7 +76,7 @@ def task_view(request, index) -> HttpResponse:
             else:
                 print("not ok" + str(form.errors) + str(request.FILES))
 
-        if task_dict['allow_file']:
+        if task_dict['allow_files']:
             form = UploadFileForm()
             task_dict['form'] = form
         try:
@@ -94,5 +95,18 @@ def task_view(request, index) -> HttpResponse:
         task_dict['teacher_view'] = True
         files = UploadedTaskFile.objects.filter(task=task)
         task_dict['files'] = files
+        task_dict['suffix'] = '?next=/task/' + str(task.index)
         return render(request, 'task.html', task_dict)
 
+
+@check_login
+def download(request, index):
+    try:
+        file_name = UploadedTaskFile.objects.get(index=index).file.name
+        file = open("uploads/" + file_name, 'rb')
+        response = StreamingHttpResponse(file)
+        response['Content-Type'] = 'application/octet-stream'
+        response['Content-Disposition'] = 'attachment;filename=' + str('"' + file_name + '"')
+        return response
+    except UploadedTaskFile.DoesNotExist:
+        return Http404

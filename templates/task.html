@@ -29,7 +29,7 @@
 
             <hr>
 
-            {% if allow_file and not teacher_view %}
+            {% if allow_files and not teacher_view %}
                 <form method="POST" class="form-control-color" role="form" enctype="multipart/form-data">
                     <div class="form-group">
                         {{ form }}
@@ -48,13 +48,15 @@
                     <tr>
                         <th>学生</th>
                         <th>文件</th>
+                        <th>提交时间</th>
                         <th>操作</th>
                     </tr>
                     {% for file in files %}
                         <tr>
                             <td>{{ file.student.ID }}</td>
-                            <td>{{ file.file.name }}</td>
-                            <td><a href="#"> 下载 </a> </td>
+                            <td>{{ file.file.name|slice:"6:" }}</td>
+                            <td>{{ file.time|date:"Y-m-d H:i:s" }}</td>
+                            <td><a href="/download/{{ file.index }}"> 下载 </a> </td>
                         </tr>
                     {% endfor %}
                 </table>

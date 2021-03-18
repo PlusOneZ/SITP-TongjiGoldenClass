@@ -32,4 +32,6 @@ urlpatterns = [
     path(r'onlineLecture/', in_develop, name='lectures'),
     path(r'courseRecords/', in_develop, name='records'),
     path('logout/', logout, name='logout'),
+    path('download/<int:index>', download, name='downlod'),
+
 ]

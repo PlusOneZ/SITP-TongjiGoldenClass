@@ -97,8 +97,9 @@ class RestrictedFileField(models.FileField):
 class UploadedTaskFile(models.Model):
     task = models.ForeignKey(Task, on_delete=models.PROTECT)
     student = models.ForeignKey(User, on_delete=models.PROTECT)
-    file = RestrictedFileField(max_upload_size=10485760, upload_to='task/'+str(task.remote_field.model.index))
+    file = RestrictedFileField(max_upload_size=10485760, upload_to='tasks/')
     time = models.DateTimeField(auto_now_add=True)
+    index = models.IntegerField(primary_key=True, default=0)
 
     @staticmethod
     def create_instance(task, student, file, content_type: list):
