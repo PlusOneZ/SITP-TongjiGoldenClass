@@ -51,6 +51,7 @@ class Task(models.Model):
             'content': self.content,
             'due_time': self.due_time,
             'allow_files': self.allow_files,
+            'subheading': self.get_task_type_display(),
         }
 
 

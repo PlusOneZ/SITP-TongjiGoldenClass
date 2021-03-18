@@ -11,6 +11,19 @@ from .models import *
 SALT = '盐巴'
 
 
+def basic_info_dict(request, highlight: str) -> dict:
+    user_id = request.COOKIES.get('user_id')
+    role = User.objects.get(ID=user_id).role
+    ret = {"user_name": user_id}
+    if role == User.TEACHER or role == User.ADMIN:
+        ret['teacher_view'] = True
+    else:
+        ret['teacher_view'] = False
+    ret['active'] = highlight
+    ret["user_page"] = "/me"
+    return ret
+
+
 # login decorator
 def check_login(func):
     @wraps(func)
@@ -38,6 +51,7 @@ def index_view(request) -> HttpResponse:
 # User console page
 @check_login
 def console_view(request) -> HttpResponse:
+    ret = basic_info_dict(request, 'none')
     user_id = request.COOKIES.get('user_id')
     role = User.objects.get(ID=user_id).role
     name = User.objects.get(ID=user_id).real_name
@@ -70,41 +84,32 @@ def console_view(request) -> HttpResponse:
                     'time': '-'
                 })
 
-    return render(
-        request, 'console.html',
-        {
-            'user_name': name,
-            "user_page": "/me",
-            "user_id": user_id,
-            "user_title": r,
-            'user_name_and_title': name + r + '的控制台',
-            'progress': table,
-            'active': 'none'
-        }
-    )
+    ret.update({
+        'user_name': name,
+        "user_title": r,
+        'user_name_and_title': name + r + '的控制台',
+        'progress': table,
+    })
+    return render(request, 'console.html', ret)
 
 
 # Courses page
 @check_login
 def courses_list_view(request) -> HttpResponse:
-    user_id = request.COOKIES.get('user_id')
+    ret = basic_info_dict(request, 'course')
     data = Course.objects.order_by('time')
     items = [d.as_brief_dict() for d in data]
-    return render(
-        request, 'courses.html',
-        {
-            'user_name': user_id,
-            "user_page": "/me",
-            'items': items,
-            'title': "课程",
-            'active': 'course'
-        }
-    )
+    ret.update({
+        'items': items,
+        'title': "课程",
+    })
+    return render(request, 'courses.html', ret)
 
 
 # Course
 @check_login
 def course_view(request, index=0) -> HttpResponse:
+    course_dict = basic_info_dict(request, 'course')
     try:
         course = Course.objects.get(index=index)
     except Course.DoesNotExist:
@@ -119,34 +124,25 @@ def course_view(request, index=0) -> HttpResponse:
         learns.time = learns.time.now()
         learns.save()
     # build dict
-    course = course.as_content_dict()
-    course['active'] = 'course'
-    course['user_name'] = user_id
-    course['user_page'] = '/me'
+    course_dict.update(course.as_content_dict())
     # prev and next
     try:
-        Course.objects.get(index=index-1)
-        course['prev_page'] = str(index-1)
+        Course.objects.get(index=index - 1)
+        course_dict['prev_page'] = str(index - 1)
     except Course.DoesNotExist:
         pass
     try:
         Course.objects.get(index=index + 1)
-        course['next_page'] = str(index + 1)
+        course_dict['next_page'] = str(index + 1)
     except Course.DoesNotExist:
         pass
-    return render(request, 'index.html', course)
+    return render(request, 'index.html', course_dict)
 
 
 @check_login
 def in_develop(request) -> HttpResponse:
-    user_id = request.COOKIES.get('user_id')
-    return render(
-        request, 'in_development.html',
-        {
-            "user_name": user_id,
-            'user_page': '/me',
-            'activate': 'none'
-        })
+    d = basic_info_dict(request, 'none')
+    return render(request, 'in_development.html', d)
 
 
 # ############################### Login ##############################
@@ -192,7 +188,6 @@ def login_view(request) -> HttpResponse:
         print("User not exist")
         ret = HttpResponseRedirect('/signin?hint=user_not_found')
         ret.set_signed_cookie('signed_in', '0', salt=SALT)
-
     return ret
 
 
