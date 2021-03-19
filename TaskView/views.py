@@ -1,4 +1,4 @@
-from django.shortcuts import render, HttpResponse, Http404
+from django.shortcuts import render, HttpResponse, Http404, redirect
 from django.http import StreamingHttpResponse
 from .models import Task, UploadedTaskFile, RestrictedFileField
 from CourseView.views import check_login, basic_info_dict
@@ -182,3 +182,11 @@ def publish(request, type_name: str):
         return render(request, 'publish.html', ret)
     else:
         return Http404
+
+
+def delete(request, type_name, index) -> HttpResponse:
+    if type_name == 'course':
+        Course.objects.filter(index=index).delete()
+    elif type_name == 'task':
+        Task.objects.filter(index=index).delete()
+    return redirect('/me')

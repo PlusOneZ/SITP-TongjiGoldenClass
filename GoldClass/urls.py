@@ -33,5 +33,6 @@ urlpatterns = [
     path(r'courseRecords/', in_develop, name='records'),
     path('logout/', logout, name='logout'),
     path('download/<int:index>', download, name='downlod'),
-    path('publish/<str:type_name>', publish, name='publish')
+    path('publish/<str:type_name>', publish, name='publish'),
+    path('delete/<str:type_name>/<int:index>', delete, name='delete')
 ]

@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from functools import wraps
 
 from .models import *
+from TaskView.models import Task
 
 # Create your views here.
 
@@ -83,12 +84,16 @@ def console_view(request) -> HttpResponse:
                     'bool': 0,
                     'time': '-'
                 })
+        ret['progress'] = table
+    elif role == User.TEACHER:
+        courses = Course.objects.all()
+        tasks = Task.objects.all()
+        ret.update({'courses': courses, 'tasks': tasks})
 
     ret.update({
         'user_name': name,
         "user_title": r,
         'user_name_and_title': name + r + '的控制台',
-        'progress': table,
     })
     return render(request, 'console.html', ret)
 

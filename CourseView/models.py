@@ -69,7 +69,7 @@ class Course(models.Model):
 
 
 class Learns(models.Model):
-    student = models.ForeignKey(User, on_delete=models.PROTECT)
-    course = models.ForeignKey(Course, on_delete=models.PROTECT)
+    student = models.ForeignKey(User, on_delete=models.SET_DEFAULT, null=True, default=None)
+    course = models.ForeignKey(Course, on_delete=models.SET_DEFAULT, null=True, default=None)
     time = models.DateTimeField(auto_now=True)
 
