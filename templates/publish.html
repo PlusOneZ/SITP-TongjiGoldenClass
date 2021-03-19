@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% load static %}
+{% include '_head_template.html' %}
+
+<body>
+
+{% include "_header_template.html" %}
+
+<div class="container-fluid">
+    <div class="row">
+
+        {% include '_nav_template.html'%}
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="width: 80%">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">{{ heading }}</h1>
+            </div>
+
+            {{ content|safe }}
+
+            <footer class="container">
+                <p class="float-end"><a href="#">Back to top</a></p>
+                <p>&copy; 2020-2021 同济金课课题组.</p>
+            </footer>
+
+        </main>
+    </div>
+</div>
+
+
+<script src={% static "js/bootstrap.bundle.min.js" %}></script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 from django.shortcuts import render, HttpResponse, Http404
 from django.http import StreamingHttpResponse
 from .models import Task, UploadedTaskFile, RestrictedFileField
-from CourseView.views import check_login
+from CourseView.views import check_login, basic_info_dict
 from CourseView.models import User
 from django import forms
 # Create your views here.
@@ -15,18 +15,13 @@ class UploadFileForm(forms.Form):
 # Task page
 @check_login
 def task_list_view(request) -> HttpResponse:
-    user_id = request.COOKIES.get('user_id')
+    ret = basic_info_dict(request, 'task')
     tasks = Task.objects.all()
     items = [t.as_brief_dict() for t in tasks]
-    return render(
-        request, 'tasks.html',
-        {
-            'user_name': user_id,
-            "user_page": "/me",
+    ret.update({
             "items": items,
-            'active': 'task'
-        }
-    )
+        })
+    return render(request, 'tasks.html', ret)
 
 
 @check_login
@@ -37,9 +32,7 @@ def task_view(request, index) -> HttpResponse:
         raise Http404
     user_id = request.COOKIES.get('user_id')
     task_dict = task.as_content_dict()
-    task_dict['user_name'] = user_id
-    task_dict['user_page'] = '/me'
-    task_dict['active'] = 'task'
+    task_dict.update(basic_info_dict(request, 'task'))
     task_dict['error'] = ''
     task_dict['teacher_view'] = False
 
@@ -109,4 +102,15 @@ def download(request, index):
         response['Content-Disposition'] = 'attachment;filename=' + str('"' + file_name + '"')
         return response
     except UploadedTaskFile.DoesNotExist:
+        return Http404
+
+
+@check_login
+def publish(request, type_name: str):
+    ret = basic_info_dict(request, 'publish+' + type_name)
+    if type_name == 'course':
+        return render(request, 'publish.html', ret)
+    elif type_name == 'task':
+        return render(request, 'publish.html', ret)
+    else:
         return Http404
