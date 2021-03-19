@@ -22,7 +22,7 @@
                 </div>
             </div>
             {% if due_time %}
-                <p> 截止日期：{{ due_time|date:"Y-m-d" }}</p>
+                <p> 截止日期：{{ due_time|date:"Y-m-d h:i" }}</p>
             {% endif %}
 
             {{ content|safe }}

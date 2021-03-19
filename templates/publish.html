@@ -11,15 +11,28 @@
 <div class="container-fluid">
     <div class="row">
 
-        {% include '_nav_template.html'%}
+        {% include '_nav_template.html' %}
 
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="width: 80%">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">{{ heading }}</h1>
             </div>
-
-            {{ content|safe }}
-
+            <p style="color: red;">{{ hint }}</p>
+            <br>
+            <form method="post">
+                <div class="form-control">
+                    {% for filed in form %}
+                        <br>
+                        <p>{{ filed.label }}:</p>
+                        {{ filed }}
+                        <br>
+                    {% endfor %}
+                </div>
+                {% csrf_token %}
+                <br>
+                <input type="submit" value="提交">
+            </form>
+            <br>
             <footer class="container">
                 <p class="float-end"><a href="#">Back to top</a></p>
                 <p>&copy; 2020-2021 同济金课课题组.</p>

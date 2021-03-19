@@ -31,7 +31,7 @@ class Task(models.Model):
     brief = models.TextField(default='任务描述')
     allow_files = models.BooleanField(default=True)
     file_type = models.CharField(max_length=30, choices=FILE_TYPES, default='TEXT')
-    due_time = models.DateField(null=True, default=None)
+    due_time = models.DateTimeField(null=True, default=None)
 
     def as_brief_dict(self) -> dict:
         return {
@@ -56,7 +56,8 @@ class Task(models.Model):
 
 
 class RestrictedFileField(models.FileField):
-    """ max_upload_size:
+    """
+            max_upload_size:
             2.5MB - 2621440
             5MB - 5242880
             10MB - 10485760
