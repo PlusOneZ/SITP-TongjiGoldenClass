@@ -150,6 +150,19 @@ def in_develop(request) -> HttpResponse:
     return render(request, 'in_development.html', d)
 
 
+@check_login
+def square(request) -> HttpResponse:
+    user_id = request.COOKIES.get('user_id')
+    if request.method == 'POST':
+        if request.POST['con'] != '':
+            con = Comment.objects.create(user=User.objects.get(ID=user_id), content=request.POST['con'])
+            con.save()
+    d = basic_info_dict(request, 'square')
+    items = [i.as_dict() for i in Comment.objects.order_by('-time')]
+    d['items'] = items
+    return render(request, 'square.html', d)
+
+
 # ############################### Login ##############################
 # Sign in page
 def sign_in_view(request) -> HttpResponse:

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+{% include "_head_template.html" %}
+<body>
+
+{% include '_header_template.html' %}
+
+<div class="container-fluid">
+    <div class="row">
+        {% include "_nav_template.html" %}
+
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+
+
+            <!-- Marketing messaging and featurettes
+            ================================================== -->
+            <!-- Wrap the rest of the page in another container to center all the content. -->
+
+            <div class="container marketing">
+
+                <!-- START THE FEATURETTES -->
+
+                <br>
+                <br>
+                <form action="#" method="post">
+                    <label for="comment"> 评论： <br><br><br><br></label>
+                    <textarea cols="60" rows="2" id="comment" placeholder="可以提问课程有关的问题哦～" name="con"></textarea>
+                    <br><br>
+                    <input type="submit" value="提交"/>
+                    {% csrf_token %}
+                </form>
+
+                <hr class="featurette-divider">
+
+                {% for item in items %}
+
+                    <div class="row featurette">
+                        <div class="col-md-8">
+                            <h5> {{ item.user }} </h5>
+                            <p class="featurette-heading" style="text-indent: 2em">
+                                <span class="text-muted">{{ item.content }}</span>
+                            </p>
+                            <p><span>{{ item.time|date:"Y-m-d H:i:s" }}</span></p>
+                        </div>
+                    </div>
+
+                    <hr class="featurette-divider">
+
+                {% endfor %}
+
+                <!-- /END THE FEATURETTES -->
+
+            </div><!-- /.container -->
+
+
+            <!-- FOOTER -->
+            <footer class="container">
+                <p class="float-end"><a href="#">Back to top</a></p>
+                <p>&copy; 2020-2021 同济金课课题组.</p>
+            </footer>
+        </main>
+    </div>
+</div>
+
+
+<script src="{% static "js/bootstrap.bundle.js" %}"></script>
+
+
+</body>
+</html>

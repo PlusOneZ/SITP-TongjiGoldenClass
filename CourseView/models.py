@@ -73,3 +73,16 @@ class Learns(models.Model):
     course = models.ForeignKey(Course, on_delete=models.SET_DEFAULT, null=True, default=None)
     time = models.DateTimeField(auto_now=True)
 
+
+class Comment(models.Model):
+    user = models.ForeignKey(User, on_delete=models.SET_DEFAULT, null=True, default=None)
+    content = models.TextField()
+    time = models.DateTimeField(auto_created=True, auto_now_add=True)
+
+    def as_dict(self):
+        d = {
+            'user': str(self.user.real_name) + '(' + str(self.user.ID) + ')',
+            'content': self.content,
+            'time': self.time
+        }
+        return d
